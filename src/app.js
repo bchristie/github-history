@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
 import History from "./history";
 import { getHistory, auth, isLoggedIn } from "./github";
+import demo from "./demo.gif";
+
+console.log(demo);
 
 export default function AppWrapper(props) {
   if (props.repo) {
     return <App {...props} />;
   } else {
-    return (
-      <Center>
-        <Landing />
-      </Center>
-    );
+    return <Landing />;
   }
 }
 
@@ -22,7 +21,8 @@ function Center({ children }) {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        height: "100%"
+        height: "100%",
+        padding: "0 40px"
       }}
     >
       {children}
@@ -31,17 +31,47 @@ function Center({ children }) {
 }
 
 function Landing() {
+  const url = `${window.location.protocol}//${
+    window.location.host
+  }/babel/babel/blob/master/packages/babel-core/test/browserify.js`;
   return (
-    <p>
-      URL should be something like
-      https://github-history.netlify.com/user/repo/commits/master/path/to/file.js
-    </p>
+    <Center>
+      <img src={demo} alt="demo" style={{ width: 900, maxWidth: "100%" }} />
+      <h1>Git History</h1>
+      <div>
+        <p>
+          Quickly browse the history of any GitHub file:
+          <ol>
+            <li>
+              Replace <strong>github.com</strong> with{" "}
+              <strong>github.githistory.xyz</strong> in any file url
+            </li>
+            <li>There's no step two</li>
+          </ol>
+          <a href={url}>Try it</a>
+        </p>
+
+        <p>
+          You can also add a <strong>Open in Git History</strong> button to
+          GitHub with the{" "}
+          <a href="https://chrome.google.com/webstore/detail/github-history-browser-ex/laghnmifffncfonaoffcndocllegejnf">
+            Chrome
+          </a>{" "}
+          and{" "}
+          <a href="https://addons.mozilla.org/es/firefox/addon/github-history/">
+            Firefox
+          </a>{" "}
+          extensions.
+        </p>
+      </div>
+      <div style={{ height: "20%" }} />
+    </Center>
   );
 }
 
 function App({ repo, sha, path, lang }) {
   const fileName = path.split("/").pop();
-  useDocumentTitle(`GitHub History - ${fileName}`);
+  useDocumentTitle(`Git History - ${fileName}`);
 
   const { commits, loading, error } = useCommitsFetcher({
     repo,
